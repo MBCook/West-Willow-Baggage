@@ -28,9 +28,9 @@ bag_record *read_bag_record(char *line) {
 
 	// Read stuff in
 
-	int count = sscanf(line, "%li %s %s %s %s", &record->timestamp, &record->luggage_id,
-												&record->flight_id, &record->source,
-												&record->destination);
+	int count = sscanf(line, "%li %s %s %s %s", &record->timestamp, record->luggage_id,
+												record->flight_id, record->source,
+												record->destination);
 
 	if (count != 5) {
 		printf("Reading in the bag only got us %d pieces of info", count);
@@ -46,6 +46,8 @@ bag_record *read_bag_record(char *line) {
 		exit(EXIT_FAILURE);
 	}
 
+	pos = pos + strlen(record->destination);	// Make up for the destination it's self
+
 	// Now that we know that, find the next start of something useful
 
 	while ((*pos == ' ') || (*pos == '\t'))
@@ -53,8 +55,11 @@ bag_record *read_bag_record(char *line) {
 
 	// OK, pos now points to the start of the comment. If it's \0, we're done. If not, copy it
 
-	if (*pos != '\0') {
+	if ((*pos != '\0') && (*pos != '\n')) {
 		int len = strlen(pos);
+
+		if (pos[len - 1] == '\n')	// Ignore trailing new lines
+			len--;
 
 		record->comment = malloc(len + 1);
 
@@ -65,7 +70,7 @@ bag_record *read_bag_record(char *line) {
 			exit(EXIT_FAILURE);
 		}
 
-		strncpy(pos, record->comment, len);
+		strncpy(record->comment, pos, len);
 	}
 
 	return record;
@@ -93,7 +98,7 @@ void cleanup_bag(bag_record *record) {
 	// Clean up the comment field, if it exists
 
 	if (record->comment != NULL) {
-		free((record->comment);
+		free(record->comment);
 	}
 
 	// Clean up the record it's self

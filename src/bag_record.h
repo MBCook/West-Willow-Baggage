@@ -12,14 +12,16 @@
 
 // Used to keep track of bags
 
-struct bag_record {
+struct bag_record_struct {
 	long timestamp;			// Seconds since unix epoch
-	char luggage_id[7];		// Luggage ID, with extra space for null termination (like all below)
+	char luggage_id[9];		// Luggage ID, with extra space for null termination (like all below)
 	char flight_id[7];		// Flight ID
 	char source[4];			// Source airport
 	char destination[4];	// Destination airport
 	char *comment;			// Comment field
 };
+
+typedef struct bag_record_struct bag_record;
 
 // Given a line of text, extract the bag record from it
 // Caller is responsible for calling cleanup_bag to cleanup the memory allocated for the comment field

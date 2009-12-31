@@ -9,6 +9,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "bag_record.h"
 
 int main(void) {
@@ -16,20 +17,24 @@ int main(void) {
 
 	memset(&buffer, '\0', 1024);
 
+	printf("Please enter a bag record:\n");
+
+	fflush(stdout);
+
 	if (fgets(buffer, 1024 - 1, stdin) == NULL) {
 		printf("Input was empty. Dang.");
 		exit(EXIT_FAILURE);
 	}
 
-	bag_record *bag = read_bag_record(&buffer);
+	bag_record *bag = read_bag_record(buffer);
 
 	printf("The bag we got is:\n");
 
-	memset(&buffer, '\0', 1024);
+	print_bag_record(bag, buffer, 1024);
 
-	print_bag_record(bag, &buffer, 1024);
+	printf("%s\n", buffer);
 
-	cleanup_bag(record);
+	cleanup_bag(bag);
 
 	exit(EXIT_SUCCESS);
 }

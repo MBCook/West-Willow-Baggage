@@ -35,6 +35,25 @@ bag_record *read_bag_record(char *line) {
 	if (count != 5) {
 		printf("Reading in the bag only got us %d pieces of info", count);
 		exit(EXIT_FAILURE);
+	} else {
+		// OK, we're going to do some sanity checks
+
+		if ((strlen(record->source) != 3) || (strlen(record->destination) != 3)) {
+			// OK, airport codes weren't the right length
+
+			printf("One (or more) airport codes were of the wrong length");
+			exit(EXIT_FAILURE);
+		} else if (strlen(record->flight_id) < 3) {
+			// Flight code wasn't two letters and at least 1 digit
+
+			printf("The flight ID was too short to be valid");
+			exit(EXIT_FAILURE);
+		} else if (strlen(record->luggage_id) != 8) {
+			// Luggage ID wasn't the right length
+
+			printf("The luggage ID wasn't 8 characters as expected");
+			exit(EXIT_FAILURE);
+		}
 	}
 
 	// Now we need to get the comment string, if it exists. Find out where it would be

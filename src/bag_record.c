@@ -27,8 +27,8 @@ bag_record *read_bag_record(char *line) {
 	memset(record, 0, sizeof(bag_record));
 
 	// Read stuff in
-	// TODO: THIS IS NOT SAFE, we need to make sure things fit
-	int count = sscanf(line, "%li %s %s %s %s", &record->timestamp, record->luggage_id,
+
+	int count = sscanf(line, "%li %8s %6s %3s %3s", &record->timestamp, record->luggage_id,
 												record->flight_id, record->source,
 												record->destination);
 

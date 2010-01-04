@@ -73,7 +73,7 @@ void cleanup_bin(bag_bin *bin) {
 		// Clear the bag, if it's there
 
 		if (bin->bag != NULL)
-			free(bin->bag);
+			cleanup_bag(bin->bag);
 
 		// Hold onto a pointer to us, point to the next bag, delete us
 

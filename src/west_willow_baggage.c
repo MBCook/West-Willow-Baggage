@@ -51,7 +51,7 @@ int main(int argc, char** argv) {
 
 		bag_record *bag = read_bag_record(buffer);
 
-		// Handle it
+		// Store it in the carousel (creating if neccessary)
 
 		if (carousel == NULL) {
 			// Create the carousel
@@ -73,6 +73,8 @@ int main(int argc, char** argv) {
 			}
 		}
 
+		// Reset the buffer, to be safe
+
 		memset(buffer, '\0', 1024);
 	}
 
@@ -80,10 +82,15 @@ int main(int argc, char** argv) {
 
 	print_carousel(carousel, buffer, 1024, argv[1], argv[2], argv[3], argv[4]);
 
+	// Free all the memory we've taken
+
 	cleanup_carousel(carousel);
 
 	exit(EXIT_SUCCESS);
 }
+
+// Given a carousel, print it's left children, the bags in it (in order), then it's right children,
+// filtering based on the arguments passed in to us. Bags that don't match aren't printed.
 
 void print_carousel(bag_carousel *carousel, char* buffer, int buffer_size,
 									char *luggage, char* flight, char *source, char *destination) {
@@ -107,6 +114,8 @@ void print_carousel(bag_carousel *carousel, char* buffer, int buffer_size,
 	if (carousel->right != NULL)
 		print_carousel(carousel->right, buffer, buffer_size, luggage, flight, source, destination);
 }
+
+// Given a bag and the filter criteria, see if the bag matches.
 
 bool filter_bag(bag_record *bag, char *luggage, char* flight, char *source, char *destination) {
 	if (strncmp("-", luggage, 1) != 0) {

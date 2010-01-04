@@ -72,13 +72,15 @@ bag_record *read_bag_record(char *line) {
 	while ((*pos == ' ') || (*pos == '\t'))
 		pos++;
 
-	// OK, pos now points to the start of the comment. If it's \0, we're done. If not, copy it
+	// OK, pos now points to the start of the comment. If it's \0 or \n, we're done. If not, copy it
 
 	if ((*pos != '\0') && (*pos != '\n')) {
 		int len = strlen(pos);
 
 		if (pos[len - 1] == '\n')	// Ignore trailing new lines
 			len--;
+
+		// Copy out the comment so we can have a version that will stay around
 
 		record->comment = malloc(len + 1);
 
@@ -90,6 +92,16 @@ bag_record *read_bag_record(char *line) {
 		memset(record->comment, '\0', len + 1);
 
 		strncpy(record->comment, pos, len);
+
+		// Make sure no ASCII control characters slipped through to annoy people (like the bell)
+		// Replace them with a space
+
+		int i;
+
+		for (i = 0; i < len; i++) {
+			if ((record->comment[i] < 32) || (record->comment[i] == 127))	// ASCII control character?
+				record->comment[i] = ' ';									// Replace it with a space
+		}
 	}
 
 	return record;

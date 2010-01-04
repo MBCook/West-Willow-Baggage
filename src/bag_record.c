@@ -63,12 +63,12 @@ bag_record *read_bag_record(char *line) {
 
 		record->comment = malloc(len + 1);
 
-		memset(record->comment, '\0', len + 1);
-
 		if (record->comment == NULL) {
 			printf("Couldn't allocate memory to hold the comment");
 			exit(EXIT_FAILURE);
 		}
+
+		memset(record->comment, '\0', len + 1);
 
 		strncpy(record->comment, pos, len);
 	}

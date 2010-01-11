@@ -7,6 +7,7 @@
  ============================================================================
  */
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -91,16 +92,24 @@ bag_record *read_bag_record(char *line) {
 
 		memset(record->comment, '\0', len + 1);
 
-		strncpy(record->comment, pos, len);
-
 		// Make sure no ASCII control characters slipped through to annoy people (like the bell)
-		// Replace them with a space
+		// Remove them by trimming them out of the string
 
-		int i;
+		char *dest = record->comment;
+		char *source = pos;
 
-		for (i = 0; i < len; i++) {
-			if ((record->comment[i] < 32) || (record->comment[i] == 127))	// ASCII control character?
-				record->comment[i] = ' ';									// Replace it with a space
+		while (true) {
+			if (*source == '\0') {	// We found the end
+				break;
+			} else if ((*source < 32) || (*source == 127)) {	// It's non-printable, so we'll drop it
+				source++;
+				continue;		// So the next char is tested
+			}
+
+			*dest = *source;	// Copy the character
+
+			dest++;				// Move to the next character
+			source++;
 		}
 	}
 

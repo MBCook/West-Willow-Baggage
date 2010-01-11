@@ -51,7 +51,7 @@ int main(int argc, char** argv) {
 
 		bag_record *bag = read_bag_record(buffer);
 
-		// Store it in the carousel (creating if neccessary)
+		// Store it in the carousel (creating if necessary)
 
 		if (carousel == NULL) {
 			// Create the carousel

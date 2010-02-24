@@ -80,11 +80,13 @@ int main(int argc, char** argv) {
 
 	// OK, we're done, we'll need to dump bag history, based on our filter
 
-	print_carousel(carousel, buffer, 1024, argv[1], argv[2], argv[3], argv[4]);
+	if (carousel != NULL) {
+		print_carousel(carousel, buffer, 1024, argv[1], argv[2], argv[3], argv[4]);
 
-	// Free all the memory we've taken
+		// Free all the memory we've taken
 
-	cleanup_carousel(carousel);
+		cleanup_carousel(carousel);
+	}
 
 	exit(EXIT_SUCCESS);
 }

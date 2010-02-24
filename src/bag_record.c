@@ -101,6 +101,8 @@ bag_record *read_bag_record(char *line) {
 		while (true) {
 			if (*source == '\0') {	// We found the end
 				break;
+			} else if (dest > record->comment + len) {	// Don't want to overrun the buffer
+				break;
 			} else if ((*source < 32) || (*source == 127)) {	// It's non-printable, so we'll drop it
 				source++;
 				continue;		// So the next char is tested
